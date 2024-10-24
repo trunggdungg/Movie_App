@@ -1,10 +1,7 @@
 package com.example.movie_app.rest;
 
 import com.example.movie_app.entity.Review;
-import com.example.movie_app.model.request.LoginRequest;
-import com.example.movie_app.model.request.SignupRequest;
-import com.example.movie_app.model.request.UpdatePasswordRequest;
-import com.example.movie_app.model.request.UpdateProfileUserRequest;
+import com.example.movie_app.model.request.*;
 import com.example.movie_app.model.response.ErrorResponse;
 import com.example.movie_app.service.AuthService;
 import jakarta.validation.Valid;
@@ -32,17 +29,11 @@ public class AuthApi {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
-        try {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signupRequest) {
+
             authService.signup(signupRequest);
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST)
-                .message(e.getMessage())
-                .build();
-            return ResponseEntity.badRequest().body(errorResponse);
-        }
+
     }
 
     @PutMapping("/update-name")
@@ -73,5 +64,34 @@ public class AuthApi {
         }
     }
 
+    //forgot password
+    @PostMapping("/forget-password")
+    public ResponseEntity<?> forgetPassword(@RequestBody ForrgetPaswordRequest email) {
+        try {
+            authService.forgetPassword(email);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .message(e.getMessage())
+                .build();
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
+
+    //reset password
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        try {
+            authService.resetPassword(resetPasswordRequest);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .message(e.getMessage())
+                .build();
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
 
 }

@@ -29,6 +29,8 @@ public class User {
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
+    Boolean is_active;
+
     // tra ve giao dien thi dung @ConTroller
     // tra ve du lieu json thi dung @RestController
 

@@ -2,10 +2,8 @@ package com.example.movie_app.controller;
 
 import com.example.movie_app.entity.*;
 import com.example.movie_app.model.Movie_Type;
-import com.example.movie_app.service.BlogService;
-import com.example.movie_app.service.EpisodeService;
-import com.example.movie_app.service.MovieService;
-import com.example.movie_app.service.ReviewService;
+import com.example.movie_app.model.request.TokenConfirmMessageResponse;
+import com.example.movie_app.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +23,7 @@ public class WebController {
     private final BlogService blogService;
     private final ReviewService reviewService;
     private final EpisodeService episodeService;
-
+    private final AuthService authService;
     @GetMapping("/")
     public String getHomePage(Model model) {
         List<Movie> listPhimBo = movieService.getMoviesByType(Movie_Type.PHIM_BO, true, 1, 6).getContent();
@@ -128,10 +126,7 @@ public class WebController {
 
     @GetMapping("/dang-ky")
     public String signupPage(HttpServletRequest request) {
-//        User user = (User) request.getSession().getAttribute("CURRENT_USER");
-//        if (user != null) {
-//            return "redirect:/";
-//        }
+
         return "web/dang-ky";
     }
 
@@ -145,4 +140,32 @@ public class WebController {
         System.out.println("user = " + user.getName());
         return "web/thong-tin-ca-nhan";
     }
+
+    @GetMapping("/xac-thuc-tai-khoan")
+    public String confirmAccount(@RequestParam String token,Model model){
+        TokenConfirmMessageResponse response = authService.verifyAccount(token);
+        model.addAttribute("response",response);
+        return "web/xac-thuc-tai-khoan";
+    }
+
+
+    @GetMapping("/quen-mat-khau")
+    public String forgetPassword(HttpServletRequest request){
+       User user = (User) request.getSession().getAttribute("CURRENT_USER");
+        if (user != null) {
+            return "redirect:/";
+        }
+        return "web/quen-mat-khau";
+    }
+
+    @GetMapping("/dat-lai-mat-khau")
+    public String resetPassword(@RequestParam String token,Model model){
+       TokenConfirmMessageResponse response = authService.verifyResetPasword(token);
+        model.addAttribute("response",response);
+        model.addAttribute("token",token);
+        return "web/dat-lai-mat-khau";
+    }
+
+
+
 }

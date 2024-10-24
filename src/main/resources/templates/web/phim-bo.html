@@ -13,7 +13,7 @@
 <body>
 <header class="bg-dark header">
     <nav class="navbar navbar-expand-lg ">
-        <div class="container-fluid">
+        <div class="container">
             <a class="navbar-brand" href="#">
                 <img src="https://motchilltv.io/logo_motchill.png" alt="" class="logo">
             </a>
@@ -26,7 +26,7 @@
                     <a class="nav-link active text-white" aria-current="page" href="/">Trang chủ</a>
                     <a class="nav-link text-white" href="/phim-bo">Phim bộ</a>
                     <a class="nav-link text-white" href="/phim-le">Phim lẻ</a>
-                    <a class="nav-link text-white" href="/phimchieurap">Phim chiếu rạp</a>
+                    <a class="nav-link text-white" href="/phim-chieu-rap">Phim chiếu rạp</a>
                     <a class="nav-link text-white" href="#">Quốc gia</a>
                     <a class="nav-link text-white" href="#">Thể loại</a>
                 </div>
@@ -40,10 +40,10 @@
 
 
 <section class="py-4 ">
-    <div class="container-fluid">
+    <div class="container">
         <h3>Phim bộ mới cập nhật</h3>
         <div class="row">
-            <div class="col-2" th:each="movie : ${movieData.getContent()}">
+            <div class="col-2" th:each="movie : ${pageData.getContent()}">
                 <a th:href="|/phim/${movie.id}/${movie.slug}|" class="movie-item text-black text-decoration-none">
                     <div class="movie-poster">
                         <!--  // rounded overflow-hidden có thể dùng vào movie-poster rounded để bo , còn overflow để ẩn những gì mà thg con trong nó thừa ra -->
@@ -58,19 +58,19 @@
         </div>
     </div>
 </section>
-<nav aria-label="Page navigation example" th:if="${movieData.getTotalPages() > 1}">
+<nav aria-label="Page navigation example" th:if="${pageData.getTotalPages() > 1}">
     <ul class="pagination  d-flex justify-content-center  mt-3">
         <li class="page-item" th:classappend="${currentPage== 1?'disabled': ''}">
             <a class="page-link" th:href="|/phim-bo?page=${currentPage - 1}|" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
         </li>
         <li class="page-item"
             th:classappend="${currentPage == number ? 'active' : ''}"
-            th:each="number : ${#numbers.sequence(1,movieData.getTotalPages())}"><a class="page-link"
+            th:each="number : ${#numbers.sequence(1,pageData.getTotalPages())}"><a class="page-link"
                                                                                                       th:href="|/phim-bo?page=${number}|"
                                                                                                       th:text="${number}">1</a>
         </li>
         <li class="page-item"
-            th:classappend="${currentPage== movieData.getTotalPages()?'disabled': ''}"
+            th:classappend="${currentPage== pageData.getTotalPages()?'disabled': ''}"
         >
             <a class="page-link" th:href="|/phim-bo?page=${currentPage + 1}|" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
         </li>
@@ -79,7 +79,7 @@
 
 
 <footer class="bg-dark py-4">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col-4">
                 <img src="https://motchilltv.io/logo_motchill.png" alt="" class="logo">

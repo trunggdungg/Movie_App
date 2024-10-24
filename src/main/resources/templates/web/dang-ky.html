@@ -79,16 +79,45 @@
             return;
         }
 
+        // Kiểm tra các trường không được để trống
+        if (!name || !email || !password) {
+            toastr.error('Vui lòng điền đầy đủ thông tin');
+            return;
+        }
+
+        // Kiểm tra định dạng email
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            toastr.error('Email không đúng định dạng');
+            return;
+        }
+
+        // Kiểm tra độ dài mật khẩu
+        if (password.length < 6) {
+            toastr.error('Mật khẩu phải có ít nhất 6 ký tự');
+            return;
+        }
+
         const data = { name, email, password };
         try {
             const response = await axios.post('/api/auth/signup', data);
-            toastr.success('Đăng ký thành công');
-            setTimeout(() => {
-                window.location.href = '/dang-nhap'; // Chuyển hướng đến trang chủ sau khi đăng ký thành công
-            }, 1000);
+
+            // Kiểm tra nếu response trả về status code 200 hoặc 201
+            if (response.status === 200) {
+                toastr.success('Đăng ký thành công');
+                setTimeout(() => {
+                    window.location.href = '/dang-nhap'; // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
+                }, 1000);
+            } else if (response.status === 201) {
+                toastr.success('Đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản');
+            } else {
+                toastr.error(response.data.message || 'Đăng ký không thành công');
+            }
         } catch (error) {
             toastr.error('Đăng ký không thành công');
         }
+
+
     });
 
 </script>
